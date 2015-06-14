@@ -22,12 +22,22 @@ class Waypoint(models.Model):
         return str(self.waypoint)
 
 
+# TripDetail model
+# Additional trip details, such as traveling with children or pets
+class TripDetail(models.Model):
+    description = models.CharField(max_length=127)
+
+    def __unicode__(self):
+        return str(self.description)
+
+
 # RoadTrip model
 # Start and end dates, Route and TripDetails
 class RoadTrip(models.Model):
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateField()
+    end_date = models.DateField()
     route = models.OneToOneField(Route)
+    details = models.ManyToManyField(TripDetail)
 
     def __unicode__(self):
         return "{} from {} to {}".format(
@@ -35,13 +45,3 @@ class RoadTrip(models.Model):
             self.start_date,
             self.end_date
             )
-
-
-# TripDetail model
-# Additional trip details, such as traveling with children or pets
-class TripDetail(models.Model):
-    description = models.CharField(max_length=127)
-    trip = models.ForeignKey(RoadTrip)
-
-    def __unicode__(self):
-        return str(self.description)
