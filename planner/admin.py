@@ -5,7 +5,7 @@ from planner.models import Route, Waypoint, RoadTrip, TripDetail
 
 class RoadTripAdmin(admin.ModelAdmin):
     model = RoadTrip
-    list_display = ('start_date', 'end_date', 'route',)
+    list_display = ('route', 'start_date', 'end_date',)
 
 
 class WaypointInline(admin.StackedInline):
@@ -19,5 +19,5 @@ class RouteAdmin(admin.ModelAdmin):
     list_display = ('origin', 'destination',)
 
 
-admin.site.register(Route, RouteAdmin)
+# admin.site.register(Route, RouteAdmin)
 admin.site.register(RoadTrip, RoadTripAdmin)
