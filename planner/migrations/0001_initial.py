@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
             name='RoadTrip',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('start_date', models.DateTimeField()),
-                ('end_date', models.DateTimeField()),
+                ('start_date', models.DateField()),
+                ('end_date', models.DateField()),
             ],
             options={
             },
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('description', models.CharField(max_length=127)),
-                ('trip', models.ForeignKey(to='planner.RoadTrip')),
+                ('trip', models.ManyToManyField(to='planner.RoadTrip')),
             ],
             options={
             },
