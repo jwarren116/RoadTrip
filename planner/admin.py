@@ -14,8 +14,11 @@ class RouteAdmin(admin.ModelAdmin):
 
 
 class RoadTripAdmin(admin.ModelAdmin):
+    def route__waypoints(self, obj):
+        return obj.route.waypoints.all()
+
     model = RoadTrip
-    list_display = ('route', 'start_date', 'end_date',)
+    list_display = ('route', 'start_date', 'end_date', 'route__waypoints')
 
 
 class TripDetailAdmin(admin.ModelAdmin):
