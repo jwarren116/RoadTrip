@@ -16,9 +16,12 @@ class Route(models.Model):
 
 class Waypoint(models.Model):
     waypoint = models.CharField(max_length=63)
-    route = models.ForeignKey(Route)
+    route = models.ForeignKey(Route, related_name="waypoints")
 
     def __unicode__(self):
+        return str(self.waypoint)
+
+    def __repr__(self):
         return str(self.waypoint)
 
 
