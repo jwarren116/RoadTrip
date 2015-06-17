@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="An app for planning your next Road Trip!">
+    <meta name="author" content="James Warren">
+    <title>Road Trip</title>
+    <!-- Core CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <!-- Google Map API -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+  </head>
+  <body>
+
+    <form action="#" onsubmit="calcRoute();" id="panel">
+      <b>Start: </b>
+      <input type="text" id="start">
+      <b>End: </b>
+      <input type="text" id="end">
+      <b>Waypoint: </b>
+      <input type="text" id="waypoint">
+      <input type="submit" value="Calculate Route">
+    </form>
+
+    <div id="map-canvas"></div>
+
+  </body>
+</html>
