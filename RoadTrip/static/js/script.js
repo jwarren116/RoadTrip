@@ -4,14 +4,20 @@ var map;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
-  var chicago = new google.maps.LatLng(41.850033, -87.6500523);
   var mapOptions = {
-    zoom:7,
-    center: chicago
+    zoom: 7,
+    center: new google.maps.LatLng(41.850033, -87.6500523)
   };
-  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
   directionsDisplay.setMap(map);
+  directionsDisplay.setPanel(document.getElementById('directions-panel'));
+
+  var control = document.getElementById('control');
+  control.style.display = 'block';
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 }
+
 
 function calcRoute() {
   var start = document.getElementById('start').value;
