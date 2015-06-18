@@ -18,13 +18,15 @@
   <body>
     <div id="control">
       <form action="#" onsubmit="calcRoute();" id="panel">
-        <label for="start">Start: </label><br />
-        <input type="text" id="start"><br />
-        <label for="end">End: </label><br />
-        <input type="text" id="end"><br />
-        <label for="waypoint">Waypoint: </label><br />
-        <input type="text" id="waypoint"><br />
-        <input type="submit" value="Calculate Route">
+        <div id="route">
+          <label for="start">Start: </label><br /><input type="text" id="start"><br />
+          <label for="end">End: </label><br /><input type="text" id="end"><br />
+          <label for="waypoint">Waypoint: </label><br /><input type="text" id="waypoint"><br />
+          <input type="submit" value="Calculate Route">
+        </div>
+        <div id="requirements">
+          <input type="checkbox" id="option1"><label for="option1"> Option1</label>
+        </div>
       </form>
     </div>
 

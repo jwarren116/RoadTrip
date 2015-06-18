@@ -13,6 +13,7 @@ html, body, #map-canvas {
   background-color: #fff;
   padding: 5px;
   border: 1px solid #999;
+  width: 300px;
 }
 
 #directions-panel {
@@ -34,4 +35,15 @@ html, body, #map-canvas {
   border: 1px solid #ccc;
   box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
   display: none;
+}
+
+#route {
+  display: inline-block;
+  float: left;
+}
+
+#requirements {
+  display: inline-block;
+  float: left;
+  margin-left: 20px;
 }
