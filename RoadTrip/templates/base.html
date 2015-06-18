@@ -16,17 +16,19 @@
 
   </head>
   <body>
+    <div id="control">
+      <form action="#" onsubmit="calcRoute();" id="panel">
+        <label for="start">Start: </label><br />
+        <input type="text" id="start"><br />
+        <label for="end">End: </label><br />
+        <input type="text" id="end"><br />
+        <label for="waypoint">Waypoint: </label><br />
+        <input type="text" id="waypoint"><br />
+        <input type="submit" value="Calculate Route">
+      </form>
+    </div>
 
-    <form action="#" onsubmit="calcRoute();" id="panel">
-      <b>Start: </b>
-      <input type="text" id="start">
-      <b>End: </b>
-      <input type="text" id="end">
-      <b>Waypoint: </b>
-      <input type="text" id="waypoint">
-      <input type="submit" value="Calculate Route">
-    </form>
-
+    <div id="directions-panel"></div>
     <div id="map-canvas"></div>
 
   </body>
