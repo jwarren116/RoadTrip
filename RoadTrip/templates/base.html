@@ -20,12 +20,17 @@
     <div id="control">
         <div id="route">
           <label for="start">Start: </label><br /><input type="text" id="start"><br />
+        </div>
+        <div id="route">
           <label for="end">End: </label><br /><input type="text" id="end"><br />
+        </div>
+        <div id="route">
           <label for="waypoint1">Waypoints: </label><br /><input type="text" id="waypoint1"><br />
           <input type="text" id="waypoint2"><br />
         </div>
-        <div id="requirements">
-          <input type="checkbox" id="gas-stations"><label for="gas-stations"> Gas Stations</label>
+        <div id="route">
+          <input type="checkbox" id="gas-stations"><label for="gas-stations"> Gas Stations</label><br />
+          <input type="checkbox" id="cafe"><label for="cafe"> Cafes</label>
         </div>
         <input type="submit" value="Calculate Route" id="submit-route" onclick="calcRoute();">
     </div>
