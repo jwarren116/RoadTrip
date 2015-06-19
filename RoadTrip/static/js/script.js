@@ -5,7 +5,7 @@ var map;
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var mapOptions = {
-    zoom: 7,
+    zoom: 5,
     center: new google.maps.LatLng(41.850033, -87.6500523)
   };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -24,11 +24,19 @@ function calcRoute() {
   var end = document.getElementById('end').value;
 
 // NEED TO CLEAN THIS UP TO USE MULTIPLE WAYPOINTS
-  var waypt = document.getElementById('waypoint').value;
+  var waypt1 = document.getElementById('waypoint1').value;
+  var waypt2 = document.getElementById('waypoint2').value;
   var waypts = []
-  waypts.push({
-    location:waypt,
-    stopover:true});
+  if (waypt1) {
+    waypts.push({
+      location:waypt1,
+      stopover:true});  
+  }
+  if (waypt2) {
+    waypts.push({
+      location:waypt2,
+      stopover:true});  
+  }
 //
 
   var request = {
