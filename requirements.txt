@@ -1,0 +1,7 @@
+Django==1.7
+Pillow==2.8.1
+django-configurations==0.8
+factory-boy==2.5.2
+selenium==2.46.0
+sorl-thumbnail==12.2
+wsgiref==0.1.2
