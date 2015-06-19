@@ -6,8 +6,8 @@ var service;
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var mapOptions = {
-    zoom: 5,
-    center: new google.maps.LatLng(41.850033, -87.6500523),
+    zoom: 4,
+    center: new google.maps.LatLng(39, -98),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
