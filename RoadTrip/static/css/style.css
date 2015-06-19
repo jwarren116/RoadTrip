@@ -34,7 +34,6 @@ html, body, #map-canvas {
   font-family: Arial;
   border: 1px solid #ccc;
   box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
-  display: none;
 }
 
 #route {
