@@ -11,7 +11,7 @@
     <!-- Core CSS -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <!-- Google Map API -->
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
     <script src="{% static 'js/script.js' %}"></script>
 
   </head>
@@ -21,12 +21,13 @@
         <div id="route">
           <label for="start">Start: </label><br /><input type="text" id="start"><br />
           <label for="end">End: </label><br /><input type="text" id="end"><br />
-          <label for="waypoint">Waypoint: </label><br /><input type="text" id="waypoint"><br />
-          <input type="submit" value="Calculate Route">
+          <label for="waypoint1">Waypoints: </label><br /><input type="text" id="waypoint1"><br />
+          <input type="text" id="waypoint2"><br />
         </div>
         <div id="requirements">
           <input type="checkbox" id="gas-stations"><label for="gas-stations"> Gas Stations</label>
         </div>
+        <input type="submit" value="Calculate Route" id="submit-route">
       </form>
     </div>
 
