@@ -1,21 +1,25 @@
-var directionsDisplay;
-var directionsService = new google.maps.DirectionsService();
+var infowindow = new google.maps.InfoWindow();
 var map;
+var routeBoxer;
+var service;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var mapOptions = {
-    zoom: 7,
-    center: new google.maps.LatLng(41.850033, -87.6500523)
+    zoom: 5,
+    center: new google.maps.LatLng(41.850033, -87.6500523),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  service = new google.maps.places.PlacesService(map);
+
+  routeBoxer = new RouteBoxer();
+
+  directionService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({ map: map })
+  
   directionsDisplay.setMap(map);
   directionsDisplay.setPanel(document.getElementById('directions-panel'));
-
-  var control = document.getElementById('control');
-  control.style.display = 'block';
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 }
 
 
@@ -23,26 +27,83 @@ function calcRoute() {
   var start = document.getElementById('start').value;
   var end = document.getElementById('end').value;
 
-// NEED TO CLEAN THIS UP TO USE MULTIPLE WAYPOINTS
-  var waypt = document.getElementById('waypoint').value;
+  var waypt1 = document.getElementById('waypoint1').value;
+  var waypt2 = document.getElementById('waypoint2').value;
   var waypts = []
-  waypts.push({
-    location:waypt,
-    stopover:true});
-//
+  if (waypt1) {
+    waypts.push({
+      location:waypt1,
+      stopover:true});  
+  }
+  if (waypt2) {
+    waypts.push({
+      location:waypt2,
+      stopover:true});  
+  }
 
   var request = {
-      origin: start,
-      destination: end,
-      waypoints: waypts,
-      optimizeWaypoints: true,
-      travelMode: google.maps.TravelMode.DRIVING
+    origin: start,
+    destination: end,
+    waypoints: waypts,
+    optimizeWaypoints: true,
+    travelMode: google.maps.TravelMode.DRIVING
   };
 
-  directionsService.route(request, function(response, status) {
+  directionService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
+
+      // Build boxes around route
+      var path = response.routes[0].overview_path;
+      var boxes = routeBoxer.box(path, 1) // distance from route
+      findPlaces(boxes,0)
+    } else {
+      alert("Directions query failed: " + status);
     }
+  });
+}
+
+function findPlaces(boxes,searchIndex) {
+  var request = {
+    bounds: boxes[searchIndex],
+    types: ["gas_station"]
+  };
+  service.radarSearch(request, function (results, status) {
+    for (var i = 0, result; result = results[i]; i++) {
+      var marker = createMarker(result);
+  }
+  searchIndex++;
+  if (searchIndex < boxes.length)
+    findPlaces(boxes,searchIndex);
+  });
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  var request = {
+    reference: place.reference
+  };
+
+  google.maps.event.addListener(marker,'click',function(){
+    service.getDetails(request, function(place, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        var contentStr = '<h5>'+place.name+'</h5><p>'+place.formatted_address;
+        if (!!place.formatted_phone_number) contentStr += '<br />'+place.formatted_phone_number;
+        if (!!place.website) contentStr += '<br /><a target="_blank" href="'+place.website+'">'+place.website+'</a>';
+        contentStr += '<br />'+place.types+'</p>';
+        infowindow.setContent(contentStr);
+        infowindow.open(map,marker);
+      } else {
+        var contentStr = "<h5>No Result, status="+status+"</h5>";
+        infowindow.setContent(contentStr);
+        infowindow.open(map,marker);
+      }
+    });
   });
 }
 
