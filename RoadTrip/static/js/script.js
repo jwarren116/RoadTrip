@@ -72,7 +72,7 @@ function findPlaces(boxes, searchIndex) {
   service.radarSearch(request, function (results, status) {
     if (results) {
       for (var i = 0; i < results.length; i++) {
-        createMarker(result[i]);
+        createMarker(results[i]);
       }
     }
     searchIndex++;
