@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 1) // distance from route
+      var boxes = routeBoxer.box(path, 1) // distance in km from route
       findPlaces(boxes,0)
     } else {
       alert("Directions query failed: " + status);
@@ -70,7 +70,7 @@ function findPlaces(boxes, searchIndex) {
   };
 
   service.radarSearch(request, function (results, status) {
-    if (results) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         createMarker(results[i]);
       }
