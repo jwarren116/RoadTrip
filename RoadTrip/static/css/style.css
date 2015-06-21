@@ -1,7 +1,8 @@
 html, body, #map-canvas {
   height: 100%;
   margin: 0px;
-  padding: 0px
+  padding: 0px;
+  overflow: hidden;
 }
 
 #panel {
@@ -37,11 +38,6 @@ html, body, #map-canvas {
 }
 
 #route {
-  display: inline-block;
-  float: left;
-}
-
-#requirements {
   display: inline-block;
   float: left;
   margin-left: 20px;

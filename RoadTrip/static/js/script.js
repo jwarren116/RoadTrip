@@ -6,8 +6,8 @@ var service;
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
   var mapOptions = {
-    zoom: 5,
-    center: new google.maps.LatLng(41.850033, -87.6500523),
+    zoom: 4,
+    center: new google.maps.LatLng(39, -98),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   };
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 1) // distance from route
+      var boxes = routeBoxer.box(path, 1) // distance in km from route
       findPlaces(boxes,0)
     } else {
       alert("Directions query failed: " + status);
@@ -63,18 +63,29 @@ function calcRoute() {
   });
 }
 
-function findPlaces(boxes,searchIndex) {
+function findPlaces(boxes, searchIndex) {
+  var selectedTypes = []; 
+  var inputElements = document.getElementsByClassName('placeOption');
+  for(var i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+             selectedTypes.push(inputElements[i].value)
+        }
+  }
+
   var request = {
     bounds: boxes[searchIndex],
-    types: ["gas_station"]
+    types: selectedTypes,
   };
+
   service.radarSearch(request, function (results, status) {
-    for (var i = 0, result; result = results[i]; i++) {
-      var marker = createMarker(result);
-  }
-  searchIndex++;
-  if (searchIndex < boxes.length)
-    findPlaces(boxes,searchIndex);
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+      }
+    }
+    searchIndex++;
+    if (searchIndex < boxes.length)
+      findPlaces(boxes, searchIndex);
   });
 }
 
@@ -92,14 +103,14 @@ function createMarker(place) {
   google.maps.event.addListener(marker,'click',function(){
     service.getDetails(request, function(place, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        var contentStr = '<h5>'+place.name+'</h5><p>'+place.formatted_address;
-        if (!!place.formatted_phone_number) contentStr += '<br />'+place.formatted_phone_number;
-        if (!!place.website) contentStr += '<br /><a target="_blank" href="'+place.website+'">'+place.website+'</a>';
-        contentStr += '<br />'+place.types+'</p>';
+        var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
+        if (!!place.formatted_phone_number) contentStr += '<br />' + place.formatted_phone_number;
+        if (!!place.website) contentStr += '<br /><a target="_blank" href="' + place.website + '">' + place.website + '</a>';
+        contentStr += '<br />' + place.types + '</p>';
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       } else {
-        var contentStr = "<h5>No Result, status="+status+"</h5>";
+        var contentStr = "<h5>No Result, status=" + status + "</h5>";
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       }
