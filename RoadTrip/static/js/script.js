@@ -64,9 +64,17 @@ function calcRoute() {
 }
 
 function findPlaces(boxes, searchIndex) {
+  var selectedTypes = []; 
+  var inputElements = document.getElementsByClassName('placeOption');
+  for(var i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+             selectedTypes.push(inputElements[i].value)
+        }
+  }
+
   var request = {
     bounds: boxes[searchIndex],
-    types: ["gas_station"]
+    types: selectedTypes,
   };
 
   service.radarSearch(request, function (results, status) {
