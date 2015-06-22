@@ -56,7 +56,8 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2) // distance in km from route
-      findPlaces(boxes,0)
+      findPlaces(boxes,0);
+      findPlacesByText(boxes,0);
     } else {
       alert("Directions query failed: " + status);
     }
@@ -71,12 +72,10 @@ function findPlaces(boxes, searchIndex) {
              selectedTypes.push(inputElements[i].value)
         }
   }
-
   var request = {
     bounds: boxes[searchIndex],
     types: selectedTypes,
   };
-
   service.radarSearch(request, function (results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
@@ -86,6 +85,30 @@ function findPlaces(boxes, searchIndex) {
     searchIndex++;
     if (searchIndex < boxes.length)
       findPlaces(boxes, searchIndex);
+  });
+}
+
+function findPlacesByText(boxes, searchIndex) {
+  var selectedTypes = [];
+  var inputElements = document.getElementsByClassName('textOption');
+  for(var i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+             selectedTypes.push(inputElements[i].value)
+        }
+  }
+  var request = {
+    bounds: boxes[searchIndex],
+    query: selectedTypes,
+  };
+  service.textSearch(request, function (results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+      }
+    }
+    searchIndex++;
+    if (searchIndex < boxes.length)
+      findPlacesByText(boxes, searchIndex);
   });
 }
 
