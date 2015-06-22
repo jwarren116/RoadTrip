@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 2) // distance in km from route
+      var boxes = routeBoxer.box(path, 2); // distance in km from route
       findPlaces(boxes,0);
       findPlacesByText(boxes,0);
     } else {
@@ -67,14 +67,14 @@ function calcRoute() {
 function findPlaces(boxes, searchIndex) {
   var selectedTypes = []; 
   var inputElements = document.getElementsByClassName('placeOption');
-  for(var i=0; inputElements[i]; ++i){
-        if(inputElements[i].checked){
+  for (var i=0; inputElements[i]; ++i) {
+        if (inputElements[i].checked) {
              selectedTypes.push(inputElements[i].value)
         }
   }
   var request = {
     bounds: boxes[searchIndex],
-    types: selectedTypes,
+    types: selectedTypes
   };
   service.radarSearch(request, function (results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -83,22 +83,18 @@ function findPlaces(boxes, searchIndex) {
       }
     }
     searchIndex++;
-    if (searchIndex < boxes.length)
+    if (searchIndex < boxes.length) {
       findPlaces(boxes, searchIndex);
+    }
   });
 }
 
 function findPlacesByText(boxes, searchIndex) {
-  var selectedTypes = [];
-  var inputElements = document.getElementsByClassName('textOption');
-  for(var i=0; inputElements[i]; ++i){
-        if(inputElements[i].checked){
-             selectedTypes.push(inputElements[i].value)
-        }
-  }
+  var selectedTypes = document.querySelector('.textOption:checked').value;
+
   var request = {
     bounds: boxes[searchIndex],
-    query: selectedTypes,
+    query: selectedTypes
   };
   service.textSearch(request, function (results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -107,8 +103,9 @@ function findPlacesByText(boxes, searchIndex) {
       }
     }
     searchIndex++;
-    if (searchIndex < boxes.length)
+    if (searchIndex < boxes.length) {
       findPlacesByText(boxes, searchIndex);
+    }
   });
 }
 
