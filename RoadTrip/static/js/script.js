@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 1) // distance in km from route
+      var boxes = routeBoxer.box(path, 2) // distance in km from route
       findPlaces(boxes,0)
     } else {
       alert("Directions query failed: " + status);
