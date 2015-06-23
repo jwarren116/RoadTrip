@@ -68,7 +68,7 @@ function findPlaces(boxes, searchIndex) {
 
   var inputElements = document.getElementsByClassName('placeOption');
   
-  for (var i=0; inputElements[i]; ++i) {
+  for (var i=0; inputElements[i]; i++) {
     if (inputElements[i].checked) {
      selectedTypes.push(inputElements[i].value)
     }
@@ -80,17 +80,11 @@ function findPlaces(boxes, searchIndex) {
   };
 
   if (selectedTypes.length > 0) {
-    service.radarSearch(request, function (results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          createMarker(results[i]);
-        }
-      }
-      searchIndex++;
-      if (searchIndex < boxes.length) {
-        findPlaces(boxes, searchIndex);
-      }
-    });
+    service.radarSearch(request, callback);
+  }
+  searchIndex++;
+  if (searchIndex < boxes.length) {
+    findPlaces(boxes, searchIndex);
   }
 }
 
@@ -99,7 +93,7 @@ function findPlacesByText(boxes, searchIndex) {
 
   var inputElements = document.getElementsByClassName('textOption');
   
-  for (var i=0; inputElements[i]; ++i) {
+  for (var i=0; inputElements[i]; i++) {
     if (inputElements[i].checked) {
      selectedTypes += inputElements[i].value + ', '
     }
@@ -111,17 +105,11 @@ function findPlacesByText(boxes, searchIndex) {
   };
 
   if (selectedTypes.length > 0) {
-    service.textSearch(request, function (results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          createMarker(results[i]);
-        }
-      }
-      searchIndex++;
-      if (searchIndex < boxes.length) {
-        findPlacesByText(boxes, searchIndex);
-      }
-    });
+    service.textSearch(request, callback);
+  }
+  searchIndex++;
+  if (searchIndex < boxes.length) {
+    findPlacesByText(boxes, searchIndex);
   }
 }
 
