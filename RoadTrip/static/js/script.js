@@ -79,38 +79,50 @@ function findPlaces(boxes, searchIndex) {
     types: selectedTypes
   };
 
-  service.radarSearch(request, function (results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        createMarker(results[i]);
+  if (selectedTypes.length > 0) {
+    service.radarSearch(request, function (results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
       }
-    }
-    searchIndex++;
-    if (searchIndex < boxes.length) {
-      findPlaces(boxes, searchIndex);
-    }
-  });
+      searchIndex++;
+      if (searchIndex < boxes.length) {
+        findPlaces(boxes, searchIndex);
+      }
+    });
+  }
 }
 
 function findPlacesByText(boxes, searchIndex) {
-  var selectedTypes = document.querySelector('.textOption:checked').value;
+  var selectedTypes = ''; 
+
+  var inputElements = document.getElementsByClassName('textOption');
+  
+  for (var i=0; inputElements[i]; ++i) {
+    if (inputElements[i].checked) {
+     selectedTypes += inputElements[i].value + ', '
+    }
+  }
 
   var request = {
     bounds: boxes[searchIndex],
     query: selectedTypes
   };
 
-  service.textSearch(request, function (results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        createMarker(results[i]);
+  if (selectedTypes.length > 0) {
+    service.textSearch(request, function (results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
       }
-    }
-    searchIndex++;
-    if (searchIndex < boxes.length) {
-      findPlacesByText(boxes, searchIndex);
-    }
-  });
+      searchIndex++;
+      if (searchIndex < boxes.length) {
+        findPlacesByText(boxes, searchIndex);
+      }
+    });
+  }
 }
 
 function createMarker(place) {
