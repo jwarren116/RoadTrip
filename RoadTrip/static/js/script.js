@@ -55,15 +55,18 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2); // distance in km from route
-      findPlaces(boxes,0);
-      findPlacesByText(boxes,0);
+      for (var i=0; i < boxes.length; i++) {
+        var bounds = boxes[i];
+        findPlaces(bounds);
+        findPlacesByText(bounds);
+      }
     } else {
       alert("Directions query failed: " + status);
     }
   });
 }
 
-function findPlaces(boxes, searchIndex) {
+function findPlaces(bounds) {
   var selectedTypes = []; 
 
   var inputElements = document.getElementsByClassName('placeOption');
@@ -75,20 +78,16 @@ function findPlaces(boxes, searchIndex) {
   }
 
   var request = {
-    bounds: boxes[searchIndex],
+    bounds: bounds,
     types: selectedTypes
   };
 
   if (selectedTypes.length > 0) {
     service.radarSearch(request, callback);
   }
-  searchIndex++;
-  if (searchIndex < boxes.length) {
-    findPlaces(boxes, searchIndex);
-  }
 }
 
-function findPlacesByText(boxes, searchIndex) {
+function findPlacesByText(bounds) {
   var selectedTypes = ''; 
 
   var inputElements = document.getElementsByClassName('textOption');
@@ -100,16 +99,12 @@ function findPlacesByText(boxes, searchIndex) {
   }
 
   var request = {
-    bounds: boxes[searchIndex],
+    bounds: bounds,
     query: selectedTypes
   };
 
   if (selectedTypes.length > 0) {
     service.textSearch(request, callback);
-  }
-  searchIndex++;
-  if (searchIndex < boxes.length) {
-    findPlacesByText(boxes, searchIndex);
   }
 }
 
