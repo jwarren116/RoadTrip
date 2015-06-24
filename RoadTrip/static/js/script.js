@@ -55,15 +55,19 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2); // distance in km from route
-      findPlaces(boxes,0);
-      findPlacesByText(boxes,0);
+      drawBoxes(boxes);
+      for (var i=0; i < boxes.length; i++) {
+        var bounds = boxes[i];
+        findPlaces(bounds);
+        findPlacesByText(bounds);
+      }
     } else {
       alert("Directions query failed: " + status);
     }
   });
 }
 
-function findPlaces(boxes, searchIndex) {
+function findPlaces(bounds) {
   var selectedTypes = []; 
 
   var inputElements = document.getElementsByClassName('placeOption');
@@ -75,20 +79,16 @@ function findPlaces(boxes, searchIndex) {
   }
 
   var request = {
-    bounds: boxes[searchIndex],
+    bounds: bounds,
     types: selectedTypes
   };
 
   if (selectedTypes.length > 0) {
     service.radarSearch(request, callback);
   }
-  searchIndex++;
-  if (searchIndex < boxes.length) {
-    findPlaces(boxes, searchIndex);
-  }
 }
 
-function findPlacesByText(boxes, searchIndex) {
+function findPlacesByText(bounds) {
   var selectedTypes = ''; 
 
   var inputElements = document.getElementsByClassName('textOption');
@@ -100,16 +100,12 @@ function findPlacesByText(boxes, searchIndex) {
   }
 
   var request = {
-    bounds: boxes[searchIndex],
+    bounds: bounds,
     query: selectedTypes
   };
 
   if (selectedTypes.length > 0) {
     service.textSearch(request, callback);
-  }
-  searchIndex++;
-  if (searchIndex < boxes.length) {
-    findPlacesByText(boxes, searchIndex);
   }
 }
 
@@ -122,8 +118,6 @@ function callback(results, status) {
 }
 
 function createMarker(place) {
-  var placeLoc = place.geometry.location;
-
   var marker = new google.maps.Marker({
     map: map,
     position: place.geometry.location
@@ -149,6 +143,22 @@ function createMarker(place) {
       }
     });
   });
+}
+
+
+function drawBoxes(boxes) {
+  boxpolys = new Array(boxes.length);
+  for (var i = 0; i < boxes.length; i++) {
+
+    boxpolys[i] = new google.maps.Rectangle({
+      bounds: boxes[i],
+      fillOpacity: 0,
+      strokeOpacity: 1.0,
+      strokeColor: '#000000',
+      strokeWeight: 3,
+      map: map
+    });
+  }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
