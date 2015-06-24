@@ -55,6 +55,7 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2); // distance in km from route
+      drawBoxes(boxes);
       for (var i=0; i < boxes.length; i++) {
         var bounds = boxes[i];
         findPlaces(bounds);
@@ -117,8 +118,6 @@ function callback(results, status) {
 }
 
 function createMarker(place) {
-  var placeLoc = place.geometry.location;
-
   var marker = new google.maps.Marker({
     map: map,
     position: place.geometry.location
@@ -144,6 +143,22 @@ function createMarker(place) {
       }
     });
   });
+}
+
+
+function drawBoxes(boxes) {
+  boxpolys = new Array(boxes.length);
+  for (var i = 0; i < boxes.length; i++) {
+
+    boxpolys[i] = new google.maps.Rectangle({
+      bounds: boxes[i],
+      fillOpacity: 0,
+      strokeOpacity: 1.0,
+      strokeColor: '#000000',
+      strokeWeight: 3,
+      map: map
+    });
+  }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
