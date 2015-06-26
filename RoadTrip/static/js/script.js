@@ -2,7 +2,7 @@ var infowindow = new google.maps.InfoWindow();
 var map;
 var routeBoxer;
 var service;
-// var searchIndex;
+var delay = 100;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -72,7 +72,7 @@ function queryPlaces(boxes, searchIndex) {
   findPlacesByText(bounds);
   if (searchIndex > 0) {
     searchIndex--;
-    window.setTimeout(queryPlaces, 150, boxes, searchIndex);
+    window.setTimeout(queryPlaces, delay, boxes, searchIndex);
   }
 }
 
@@ -123,8 +123,10 @@ function callback(results, status) {
     for (var i = 0; i < results.length; i++) {
       createMarker(results[i]);
     }
-  }
-  if (status != google.maps.places.PlacesServiceStatus.OK) {
+  } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+    delay++;
+    console.log('Error: ' + status);
+  } else {
     console.log('Error: ' + status);
   }
 }
