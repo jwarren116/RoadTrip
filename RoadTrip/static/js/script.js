@@ -56,7 +56,6 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2); // distance in km from route
-      // drawBoxes(boxes);
       var searchIndex = boxes.length - 1;
       queryPlaces(boxes, searchIndex);
     } else {
@@ -142,19 +141,6 @@ function findPlacesByText(bounds) {
   }
 }
 
-function callback(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
-    }
-  } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-    delay++;
-    console.log(status + ': ' + results);
-  } else {
-    console.log('Error: ' + status);
-  }
-}
-
 function createMarker(place) {
   var marker = new google.maps.Marker({
     map: map,
@@ -181,22 +167,6 @@ function createMarker(place) {
       }
     });
   });
-}
-
-
-function drawBoxes(boxes) {
-  boxpolys = new Array(boxes.length);
-  for (var i = 0; i < boxes.length; i++) {
-
-    boxpolys[i] = new google.maps.Rectangle({
-      bounds: boxes[i],
-      fillOpacity: 0,
-      strokeOpacity: 1.0,
-      strokeColor: '#000000',
-      strokeWeight: 1,
-      map: map
-    });
-  }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
