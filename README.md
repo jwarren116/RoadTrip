@@ -1,6 +1,11 @@
 # RoadTrip
 
-RoadTrip is a Django/Python web app for planning road trips. Through the app, a user will be able to plan key details or their trip, such as specific routes and stops. Additionally, users will be able to get important information about important places near their route, like gas stations, parks, historical locations, etc.
+RoadTrip is a web app for planning road trips! Through the app, a user will be able to plan key details or their trip, such as specific routes and stops. Additionally, users will be able to get important information about important places near their route, like gas stations, parks, historical locations, etc.
+
+The app was built utilizing the following technologies:
+- Python/Django Framework
+- Google Maps JavaScript API with the Places Library
+- RouteBoxer
 
 Key user stories are outlined below.
 
