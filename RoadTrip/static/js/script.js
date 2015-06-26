@@ -2,6 +2,7 @@ var infowindow = new google.maps.InfoWindow();
 var map;
 var routeBoxer;
 var service;
+// var searchIndex;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -54,17 +55,25 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 2); // distance in km from route
-      drawBoxes(boxes);
-      for (var i=0; i < boxes.length; i++) {
-        var bounds = boxes[i];
-        findPlaces(bounds);
-        findPlacesByText(bounds);
-      }
+      var boxes = routeBoxer.box(path, 1); // distance in km from route
+      // drawBoxes(boxes);
+      var searchIndex = boxes.length - 1;
+      queryPlaces(boxes, searchIndex);
     } else {
       alert("Directions query failed: " + status);
     }
   });
+}
+
+function queryPlaces(boxes, searchIndex) {
+  // delay calls to Places API to prevent going over query limit (10/sec)
+  var bounds = boxes[searchIndex];
+  findPlaces(bounds);
+  findPlacesByText(bounds);
+  if (searchIndex > 0) {
+    searchIndex--;
+    window.setTimeout(queryPlaces, 150, boxes, searchIndex);
+  }
 }
 
 function findPlaces(bounds) {
@@ -115,6 +124,9 @@ function callback(results, status) {
       createMarker(results[i]);
     }
   }
+  if (status != google.maps.places.PlacesServiceStatus.OK) {
+    console.log('Error: ' + status);
+  }
 }
 
 function createMarker(place) {
@@ -155,7 +167,7 @@ function drawBoxes(boxes) {
       fillOpacity: 0,
       strokeOpacity: 1.0,
       strokeColor: '#000000',
-      strokeWeight: 3,
+      strokeWeight: 1,
       map: map
     });
   }
