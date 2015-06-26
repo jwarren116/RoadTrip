@@ -2,7 +2,7 @@ var infowindow = new google.maps.InfoWindow();
 var map;
 var routeBoxer;
 var service;
-var delay = 100;
+var delay = 250;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 1); // distance in km from route
+      var boxes = routeBoxer.box(path, 2); // distance in km from route
       // drawBoxes(boxes);
       var searchIndex = boxes.length - 1;
       queryPlaces(boxes, searchIndex);
@@ -72,7 +72,7 @@ function queryPlaces(boxes, searchIndex) {
   findPlacesByText(bounds);
   if (searchIndex > 0) {
     searchIndex--;
-    window.setTimeout(queryPlaces, delay, boxes, searchIndex);
+    setTimeout(queryPlaces, delay, boxes, searchIndex);
   }
 }
 
@@ -93,7 +93,19 @@ function findPlaces(bounds) {
   };
 
   if (selectedTypes.length > 0) {
-    service.radarSearch(request, callback);
+    service.radarSearch(request, function(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
+      } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+        delay++;
+        console.log('new delay: ' + delay);
+        setTimeout(findPlaces, delay, bounds);
+      } else {
+        console.log('Error: ' + status);
+      }
+    });
   }
 }
 
@@ -114,7 +126,19 @@ function findPlacesByText(bounds) {
   };
 
   if (selectedTypes.length > 0) {
-    service.textSearch(request, callback);
+    service.textSearch(request, function(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
+      } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+        delay++;
+        console.log('new delay: ' + delay);
+        findPlacesByText(bounds);
+      } else {
+        console.log('Error: ' + status);
+      }
+    });
   }
 }
 
@@ -125,7 +149,7 @@ function callback(results, status) {
     }
   } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
     delay++;
-    console.log('Error: ' + status);
+    console.log(status + ': ' + results);
   } else {
     console.log('Error: ' + status);
   }
