@@ -77,7 +77,6 @@ function queryPlaces(boxes, searchIndex) {
 
 function findPlaces(bounds) {
   var selectedTypes = []; 
-
   var inputElements = document.getElementsByClassName('placeOption');
   
   for (var i=0; inputElements[i]; i++) {
@@ -110,7 +109,6 @@ function findPlaces(bounds) {
 
 function findPlacesByText(bounds) {
   var selectedTypes = ''; 
-
   var inputElements = document.getElementsByClassName('textOption');
   
   for (var i=0; inputElements[i]; i++) {
