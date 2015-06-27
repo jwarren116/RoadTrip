@@ -55,7 +55,7 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 2); // distance in km from route
+      var boxes = routeBoxer.box(path, 3); // distance in km from route
       var searchIndex = boxes.length - 1;
       queryPlaces(boxes, searchIndex);
     } else {
