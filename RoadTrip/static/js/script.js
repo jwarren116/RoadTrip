@@ -56,6 +56,7 @@ function calcRoute() {
       // Build boxes around route
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 3); // distance in km from route
+      
       var searchIndex = boxes.length - 1;
       queryPlaces(boxes, searchIndex);
     } else {
@@ -76,6 +77,7 @@ function queryPlaces(boxes, searchIndex) {
 }
 
 function findPlaces(bounds) {
+  // utilize radar search to locate establishments of a certain type
   var selectedTypes = []; 
   var inputElements = document.getElementsByClassName('placeOption');
   
@@ -108,6 +110,7 @@ function findPlaces(bounds) {
 }
 
 function findPlacesByText(bounds) {
+  // utilize search by text to locate more specific establishments
   var selectedTypes = ''; 
   var inputElements = document.getElementsByClassName('textOption');
   
