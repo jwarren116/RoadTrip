@@ -172,7 +172,7 @@ function createMarker(place) {
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       } else {
-        var contentStr = "<h5>No Result, status=" + status + "</h5>";
+        var contentStr = "<h5>Oops! " + status + "</h5>";
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       }
