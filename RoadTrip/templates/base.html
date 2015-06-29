@@ -18,27 +18,32 @@
   </head>
   <body>
     <div id="control">
-        <div id="route">
-          <label for="start">Start: </label><br /><input type="text" id="start"><br />
-        </div>
-        <div id="route">
-          <label for="end">End: </label><br /><input type="text" id="end"><br />
-        </div>
-        <div id="route">
-          <label for="waypoint1">Waypoints: </label><br /><input type="text" id="waypoint1"><br />
-          <input type="text" id="waypoint2"><br />
-        </div>
-        <div id="route">
-          <input type="checkbox" class="placeOption" value="gas_station"><label for="gas_station"> Gas Stations</label><br />
-          <input type="checkbox" class="placeOption" value="cafe"><label for="cafe"> Cafes</label><br />
-          <input type="checkbox" class="placeOption" value="restaurant"><label for="restaurant"> Restaurants</label><br />
-          <input type="checkbox" class="placeOption" value="park"><label for="park"> Parks</label><br />
-          <input type="checkbox" class="placeOption" value="lodging"><label for="lodging"> Lodging</label>
-        </div>
-        <div id="route">
-          <!-- <input type="checkbox" class="textOption" value="starbucks"><label for="starbucks"> Starbucks</label> -->
-        </div>
-        <input type="submit" value="Calculate Route" id="submit-route" onclick="calcRoute();">
+      <div class="route">
+        <label for="start">Start: </label><br /><input type="text" id="start"><br />
+      </div>
+      <div class="route">
+        <label for="end">End: </label><br /><input type="text" id="end"><br />
+      </div>
+      <div class="route">
+        <label for="waypoint1">Waypoints: </label><br /><input type="text" id="waypoint1"><br />
+        <input type="text" id="waypoint2"><br />
+      </div>
+      <div class="route">
+        <input type="checkbox" class="placeOption" value="gas_station"><label for="gas_station"> Gas Stations</label><br />
+        <input type="checkbox" class="placeOption" value="cafe"><label for="cafe"> Cafes</label><br />
+        <input type="checkbox" class="placeOption" value="restaurant"><label for="restaurant"> Restaurants</label><br />
+        <input type="checkbox" class="placeOption" value="park"><label for="park"> Parks</label><br />
+        <input type="checkbox" class="placeOption" value="lodging"><label for="lodging"> Lodging</label>
+      </div>
+      <div class="route">
+        <!-- <input type="checkbox" class="textOption" value="starbucks"><label for="starbucks"> Starbucks</label> -->
+      </div>
+
+      <div id="logo" class="route">
+        <h2>Road Trip Planner</h2>
+      </div>
+
+      <input type="submit" value="Calculate Route" id="submit-route" onclick="calcRoute();">
     </div>
 
     <div id="directions-panel"></div>

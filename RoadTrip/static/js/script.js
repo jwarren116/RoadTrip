@@ -55,7 +55,8 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 2); // distance in km from route
+      var boxes = routeBoxer.box(path, 3); // distance in km from route
+      
       var searchIndex = boxes.length - 1;
       queryPlaces(boxes, searchIndex);
     } else {
@@ -76,10 +77,11 @@ function queryPlaces(boxes, searchIndex) {
 }
 
 function findPlaces(bounds) {
+  // utilize radar search to locate establishments of a certain type
   var selectedTypes = []; 
-
   var inputElements = document.getElementsByClassName('placeOption');
   
+  // build list of selected place types
   for (var i=0; inputElements[i]; i++) {
     if (inputElements[i].checked) {
      selectedTypes.push(inputElements[i].value)
@@ -91,6 +93,7 @@ function findPlaces(bounds) {
     types: selectedTypes
   };
 
+  // only execute API call if places are selected
   if (selectedTypes.length > 0) {
     service.radarSearch(request, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -100,6 +103,10 @@ function findPlaces(bounds) {
       } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
         delay++;
         console.log('new delay: ' + delay);
+        // this method poses problems by creating a race condition where requerying
+        // the API will bump all API calls behind it and the delay increases too rapidly;
+        // the appropriate fix will instead send the bounds with the OQL status to the back
+        // of the queue
         setTimeout(findPlaces, delay, bounds);
       } else {
         console.log('Error: ' + status);
@@ -109,10 +116,11 @@ function findPlaces(bounds) {
 }
 
 function findPlacesByText(bounds) {
+  // utilize search by text to locate more specific establishments
   var selectedTypes = ''; 
-
   var inputElements = document.getElementsByClassName('textOption');
   
+  // build list of selected place types
   for (var i=0; inputElements[i]; i++) {
     if (inputElements[i].checked) {
      selectedTypes += inputElements[i].value + ', '
@@ -124,6 +132,7 @@ function findPlacesByText(bounds) {
     query: selectedTypes
   };
 
+  // only execute API call if places are selected
   if (selectedTypes.length > 0) {
     service.textSearch(request, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -131,9 +140,11 @@ function findPlacesByText(bounds) {
           createMarker(results[i]);
         }
       } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+        // if query limit is reached, increase delay and recall function with new delay
         delay++;
         console.log('new delay: ' + delay);
-        findPlacesByText(bounds);
+        // see race condition comment above in findPlaces()
+        setTimeout(findPlacesByText, delay, bounds);
       } else {
         console.log('Error: ' + status);
       }
@@ -151,7 +162,7 @@ function createMarker(place) {
     reference: place.reference
   };
 
-  google.maps.event.addListener(marker,'click',function(){
+  google.maps.event.addListener(marker, 'click', function() {
     service.getDetails(request, function(place, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
@@ -161,7 +172,7 @@ function createMarker(place) {
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       } else {
-        var contentStr = "<h5>No Result, status=" + status + "</h5>";
+        var contentStr = "<h5>Oops! " + status + "</h5>";
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       }
