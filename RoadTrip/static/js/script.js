@@ -57,8 +57,7 @@ function calcRoute() {
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 3); // distance in km from route
       
-      var searchIndex = boxes.length - 1;
-      queryPlaces(boxes, searchIndex);
+      queryPlaces(boxes, 0);
     } else {
       alert("Directions query failed: " + status);
     }
@@ -69,9 +68,9 @@ function queryPlaces(boxes, searchIndex) {
   // delay calls to Places API to prevent going over query limit (10/sec)
   var bounds = boxes[searchIndex];
   findPlaces(bounds);
-  findPlacesByText(bounds);
-  if (searchIndex > 0) {
-    searchIndex--;
+  // findPlacesByText(bounds);
+  searchIndex++;
+  if (searchIndex < boxes.length) {
     setTimeout(queryPlaces, delay, boxes, searchIndex);
   }
 }
@@ -172,7 +171,7 @@ function createMarker(place) {
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       } else {
-        var contentStr = "<h5>Oops! " + status + "</h5>";
+        var contentStr = "<h5>Oops! Results are still loading, please try again in a few moments!</h5>" + "<small>" + status + "</small>";
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       }
