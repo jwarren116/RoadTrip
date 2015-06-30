@@ -51,11 +51,12 @@ function calcRoute() {
 
   directionService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      document.getElementById('instructions').style.display = 'none';
       directionsDisplay.setDirections(response);
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 3); // distance in km from route
+      var boxes = routeBoxer.box(path, 2.2); // distance in km from route
       
       queryPlaces(boxes, 0);
     } else {
