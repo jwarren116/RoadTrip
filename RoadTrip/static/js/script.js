@@ -30,15 +30,15 @@ function calcRoute() {
   var waypt1 = document.getElementById('waypoint1').value;
   var waypt2 = document.getElementById('waypoint2').value;
   var waypts = []
-  if (waypt1) {
+  if (!!waypt1) {
     waypts.push({
-      location:waypt1,
-      stopover:true});  
+      location: waypt1,
+      stopover: true});
   }
-  if (waypt2) {
+  if (!!waypt2) {
     waypts.push({
-      location:waypt2,
-      stopover:true});  
+      location: waypt2,
+      stopover: true});
   }
 
   var request = {
