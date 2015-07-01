@@ -30,15 +30,15 @@ function calcRoute() {
   var waypt1 = document.getElementById('waypoint1').value;
   var waypt2 = document.getElementById('waypoint2').value;
   var waypts = []
-  if (waypt1) {
+  if (!!waypt1) {
     waypts.push({
-      location:waypt1,
-      stopover:true});  
+      location: waypt1,
+      stopover: true});
   }
-  if (waypt2) {
+  if (!!waypt2) {
     waypts.push({
-      location:waypt2,
-      stopover:true});  
+      location: waypt2,
+      stopover: true});
   }
 
   var request = {
@@ -51,14 +51,14 @@ function calcRoute() {
 
   directionService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      document.getElementById('instructions').style.display = 'none';
       directionsDisplay.setDirections(response);
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 3); // distance in km from route
+      var boxes = routeBoxer.box(path, 2.2); // distance in km from route
       
-      var searchIndex = boxes.length - 1;
-      queryPlaces(boxes, searchIndex);
+      queryPlaces(boxes, 0);
     } else {
       alert("Directions query failed: " + status);
     }
@@ -69,9 +69,9 @@ function queryPlaces(boxes, searchIndex) {
   // delay calls to Places API to prevent going over query limit (10/sec)
   var bounds = boxes[searchIndex];
   findPlaces(bounds);
-  findPlacesByText(bounds);
-  if (searchIndex > 0) {
-    searchIndex--;
+  // findPlacesByText(bounds);
+  searchIndex++;
+  if (searchIndex < boxes.length) {
     setTimeout(queryPlaces, delay, boxes, searchIndex);
   }
 }
@@ -172,7 +172,7 @@ function createMarker(place) {
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       } else {
-        var contentStr = "<h5>Oops! " + status + "</h5>";
+        var contentStr = "<h5>Oops! Results are still loading, please try again in a few moments!</h5>" + "<small>" + status + "</small>";
         infowindow.setContent(contentStr);
         infowindow.open(map,marker);
       }
