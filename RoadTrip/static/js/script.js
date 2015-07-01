@@ -101,7 +101,9 @@ function findPlaces(bounds) {
           createMarker(results[i]);
         }
       } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-        delay++;
+        if (delay < 500) {
+          delay++;
+        }
         console.log('new delay: ' + delay);
         // this method poses problems by creating a race condition where requerying
         // the API will bump all API calls behind it and the delay increases too rapidly;
