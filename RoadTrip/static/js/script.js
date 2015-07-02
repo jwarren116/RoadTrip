@@ -58,6 +58,7 @@ function calcRoute() {
       var path = response.routes[0].overview_path;
       var boxes = routeBoxer.box(path, 2.2); // distance in km from route
       
+      delay = 250;
       queryPlaces(boxes, 0);
     } else {
       alert("Directions query failed: " + status);
