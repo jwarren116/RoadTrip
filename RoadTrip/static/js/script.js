@@ -72,7 +72,6 @@ function queryPlaces(boxes, searchIndex) {
   // delay calls to Places API to prevent going over query limit (10/sec)
   var bounds = boxes[searchIndex];
   findPlaces(bounds);
-  // findPlacesByText(bounds);
   searchIndex++;
   if (searchIndex < boxes.length) {
     setTimeout(queryPlaces, delay, boxes, searchIndex);
@@ -109,52 +108,9 @@ function findPlaces(bounds) {
         }
         console.log('new delay: ' + delay);
 
-        // this method poses problems by creating a race condition where requerying
-        // the API will bump all API calls behind it and the delay increases too rapidly;
-        // the appropriate fix will instead send the bounds with the OQL status to the back
-        // of the queue
-        // setTimeout(findPlaces, delay, bounds);
-
         // add the bounds that over query limit to the end of `boxes` to be requieried later
         // this removes the race condition where multiple boxes are queried at once
         boxes.push(bounds);
-      } else {
-        console.log('Error: ' + status);
-      }
-    });
-  }
-}
-
-function findPlacesByText(bounds) {
-  // utilize search by text to locate more specific establishments
-  var selectedTypes = ''; 
-  var inputElements = document.getElementsByClassName('textOption');
-  
-  // build list of selected place types
-  for (var i=0; inputElements[i]; i++) {
-    if (inputElements[i].checked) {
-     selectedTypes += inputElements[i].value + ', '
-    }
-  }
-
-  var request = {
-    bounds: bounds,
-    query: selectedTypes
-  };
-
-  // only execute API call if places are selected
-  if (selectedTypes.length > 0) {
-    service.textSearch(request, function(results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-          createMarker(results[i]);
-        }
-      } else if (status == google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-        // if query limit is reached, increase delay and recall function with new delay
-        delay++;
-        console.log('new delay: ' + delay);
-        // see race condition comment above in findPlaces()
-        setTimeout(findPlacesByText, delay, bounds);
       } else {
         console.log('Error: ' + status);
       }
