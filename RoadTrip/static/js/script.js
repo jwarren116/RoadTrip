@@ -2,7 +2,7 @@ var infowindow = new google.maps.InfoWindow();
 var map;
 var routeBoxer;
 var service;
-var delay = 250;
+var delay;
 var boxes = [];
 
 function initialize() {
@@ -59,7 +59,7 @@ function calcRoute() {
       var path = response.routes[0].overview_path;
       boxes = routeBoxer.box(path, 2.2); // distance in km from route
       
-      delay = 250;
+      delay = 200;
       queryPlaces(boxes, 0);
 
     } else {
