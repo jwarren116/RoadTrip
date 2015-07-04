@@ -3,6 +3,7 @@ var map;
 var routeBoxer;
 var service;
 var delay = 250;
+var boxes = [];
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -56,10 +57,11 @@ function calcRoute() {
 
       // Build boxes around route
       var path = response.routes[0].overview_path;
-      var boxes = routeBoxer.box(path, 2.2); // distance in km from route
+      boxes = routeBoxer.box(path, 2.2); // distance in km from route
       
       delay = 250;
       queryPlaces(boxes, 0);
+
     } else {
       alert("Directions query failed: " + status);
     }
@@ -106,11 +108,16 @@ function findPlaces(bounds) {
           delay++;
         }
         console.log('new delay: ' + delay);
+
         // this method poses problems by creating a race condition where requerying
         // the API will bump all API calls behind it and the delay increases too rapidly;
         // the appropriate fix will instead send the bounds with the OQL status to the back
         // of the queue
-        setTimeout(findPlaces, delay, bounds);
+        // setTimeout(findPlaces, delay, bounds);
+
+        // add the bounds that over query limit to the end of `boxes` to be requieried later
+        // this removes the race condition where multiple boxes are queried at once
+        boxes.push(bounds);
       } else {
         console.log('Error: ' + status);
       }
