@@ -50,4 +50,5 @@ html, body, #map-canvas {
 #loading {
   font-family: 'Architects Daughter';
   display: none;
+  text-align: center;
 }
