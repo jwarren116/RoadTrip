@@ -4,6 +4,7 @@ var routeBoxer;
 var service;
 var delay;
 var boxes = [];
+var searchIndex = 0;
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -53,6 +54,7 @@ function calcRoute() {
   directionService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       document.getElementById('instructions').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
       directionsDisplay.setDirections(response);
 
       // Build boxes around route
@@ -60,7 +62,7 @@ function calcRoute() {
       boxes = routeBoxer.box(path, 4.4); // distance in km from route
       
       delay = 200;
-      queryPlaces(boxes, 0);
+      queryPlaces(boxes, searchIndex);
 
     } else {
       alert("Directions query failed: " + status);
@@ -75,6 +77,9 @@ function queryPlaces(boxes, searchIndex) {
   searchIndex++;
   if (searchIndex < boxes.length) {
     setTimeout(queryPlaces, delay, boxes, searchIndex);
+  }
+  if (searchIndex == boxes.length) {
+    document.getElementById('loading').style.display = 'none';
   }
 }
 
