@@ -46,3 +46,9 @@ html, body, #map-canvas {
   font-weight: 200;
   margin: 20px;
 }
+
+#loading {
+  font-family: 'Architects Daughter';
+  display: none;
+  text-align: center;
+}
