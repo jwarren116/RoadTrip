@@ -4,13 +4,13 @@ from django.db import models
 # Route model
 # Start and end locations with additional stop-overs
 class Route(models.Model):
-    origin = models.CharField(max_length=63)
-    destination = models.CharField(max_length=63)
+    start = models.CharField(max_length=63)
+    end = models.CharField(max_length=63)
 
     def __unicode__(self):
         return "{} to {}".format(
-            self.origin,
-            self.destination
+            self.start,
+            self.end
             )
 
 
